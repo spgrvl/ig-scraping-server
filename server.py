@@ -4,6 +4,7 @@ from flask import Flask
 from flask import request
 import json
 import re
+import os
 
 # Create an instance of Flask
 app = Flask(__name__)
@@ -13,8 +14,13 @@ import logging
 logging.basicConfig(filename='error.log',level=logging.INFO)
 logging.getLogger().addHandler(logging.StreamHandler())
 
-# Open Chrome Webdriver
-chrome_path = "/usr/lib/chromium-browser/chromedriver"
+if os.name == "nt":
+	chrome_path = r"C:\chromedriver_win32\chromedriver.exe"
+elif os.name == "posix":
+	chrome_path = "/usr/lib/chromium-browser/chromedriver"
+else:
+	print("Error: Chrome path is not set for this os: " + os.name)
+
 chrome_options = Options()
 chrome_options.add_argument("--headless")
 driver = webdriver.Chrome(chrome_path,chrome_options=chrome_options)
