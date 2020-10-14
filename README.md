@@ -1,6 +1,6 @@
 # Instagram Scraping Server
 
-Instagram Scraping Server is a simple API that returns Instagram Likes or Views counts of a given post's shortcode, built with Python and Flask.
+Instagram Scraping Server is a simple API that returns Instagram Likes, Views or Followers counts of a given post's shortcode or profile's username, built with Python and Flask.
 
 ## Requirements
 
@@ -55,8 +55,31 @@ Instagram Scraping Server is a simple API that returns Instagram Likes or Views 
 }
 ```
 
-### Likes/Views Count replies
+### Get followers count
 
-- `> 0` = Actual views count
-- `-1` = No views counter
+**Definition**
+
+`GET /followers?username=<ig_username>`
+
+**Response**
+
+- `200 OK` on success
+```json
+{
+	"username": "<ig_username>",
+	"followers_count": "<followers_count>"
+}
+```
+
+- `400/404 Not Found` on failure
+```json
+{
+	"message": "<error>",
+}
+```
+
+### Likes/Views/Followers Count replies
+
+- `> 0` = Actual count
+- `-1` = No counter
 - `-2` = Page Not Found
