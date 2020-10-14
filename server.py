@@ -30,28 +30,34 @@ def views_count(shortcode):
 	driver.get(url)
 	if (driver.title == "Page Not Found • Instagram"):
 		return -2
-	for _ in range (2):
-		try:
-			post_source = driver.page_source
-			views_count = int(re.findall('(?<="video_view_count":)[0-9]*(?=,)',post_source)[0])
-			break
-		except:
-			return -1
-	return views_count
+	try:
+		page_source = driver.page_source
+		views_count = int(re.findall('(?<="video_view_count":)[0-9]*(?=,)', page_source)[0])
+		return views_count
+	except:
+		return -1
 
 def likes_count(shortcode):
 	url = "https://www.instagram.com/p/" + shortcode
 	driver.get(url)
 	if (driver.title == "Page Not Found • Instagram"):
 		return -2
-	for _ in range (2):
-		try:
-			post_source = driver.page_source
-			likes_count = int(re.findall('(?<="edge_media_preview_like":{"count":)[0-9]*(?=,)',post_source)[0])
-			break
-		except:
-			return -1
-	return likes_count
+	try:
+		page_source = driver.page_source
+		likes_count = int(re.findall('(?<="edge_media_preview_like":{"count":)[0-9]*(?=,)', page_source)[0])
+		return likes_count
+	except:
+		return -1
+
+def followers_count(username):
+	url = "https://www.instagram.com/" + username + "?__a=1"
+	driver.get(url)
+	try:
+		page_source = driver.page_source
+		followers_count = int(re.findall('(?<="edge_followed_by":{"count":)[0-9]*(?=})', page_source)[0])
+		return followers_count
+	except:
+		return -1
 
 @app.route("/views", methods=['GET'])
 def api_views():
@@ -76,6 +82,19 @@ def api_likes():
 		return response
 	else:
 		data = {'message':'no shortcode provided'}
+		response = app.response_class(response=json.dumps(data), status=400, mimetype='application/json')
+		return response
+
+@app.route("/followers", methods=['GET'])
+def api_followers():
+	if 'username' in request.args:
+		username = str(request.args['username'].strip("/"))
+		followers_counter = str(followers_count(username))
+		data = {'username':username, 'followers_count':str(followers_counter)}
+		response = app.response_class(response=json.dumps(data), mimetype='application/json')
+		return response
+	else:
+		data = {'message':'no username provided'}
 		response = app.response_class(response=json.dumps(data), status=400, mimetype='application/json')
 		return response
 
