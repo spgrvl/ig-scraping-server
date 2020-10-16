@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from flask import Flask
 from flask import request
+from flask import send_file
 import json
 import re
 import os
@@ -58,6 +59,10 @@ def followers_count(username):
 		return followers_count
 	except:
 		return -1
+
+@app.route('/favicon.ico')
+def favicon():
+	return send_file('favicon.ico')
 
 @app.route("/views", methods=['GET'])
 def api_views():
