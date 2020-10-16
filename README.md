@@ -13,7 +13,7 @@ Instagram Scraping Server is a simple API that serves information about Instagra
 
 **Definition**
 
-`GET /<ig_username>`
+`GET /<ig_username>/`
 
 **Response**
 
@@ -36,7 +36,7 @@ Instagram Scraping Server is a simple API that serves information about Instagra
 
 **Definition**
 
-`GET /p/<ig_post_shortcode>`
+`GET /p/<ig_post_shortcode>/`
 
 **Response**
 

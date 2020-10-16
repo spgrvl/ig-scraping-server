@@ -64,18 +64,16 @@ def followers_count(username):
 def favicon():
 	return send_file('favicon.ico')
 
-@app.route("/p/<shortcode>", methods=['GET'])
+@app.route("/p/<shortcode>/", methods=['GET'])
 def api_post(shortcode):
-	shortcode.strip("/")
 	likes_counter = str(likes_count(shortcode))
 	views_counter = str(views_count(shortcode))
 	data = {'shortcode':shortcode, 'likes_count':likes_counter, 'views_count':views_counter}
 	response = app.response_class(response=json.dumps(data), mimetype='application/json')
 	return response
 
-@app.route("/<username>", methods=['GET'])
+@app.route("/<username>/", methods=['GET'])
 def api_user(username):
-	username.strip("/")
 	followers_counter = str(followers_count(username))
 	data = {'username':username, 'followers_count':str(followers_counter)}
 	response = app.response_class(response=json.dumps(data), mimetype='application/json')
