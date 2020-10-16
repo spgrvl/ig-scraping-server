@@ -64,44 +64,22 @@ def followers_count(username):
 def favicon():
 	return send_file('favicon.ico')
 
-@app.route("/views", methods=['GET'])
-def api_views():
-	if 'shortcode' in request.args:
-		shortcode = str(request.args['shortcode'].strip("/"))
-		views_counter = str(views_count(shortcode))
-		data = {'shortcode':shortcode, 'views_count':str(views_counter)}
-		response = app.response_class(response=json.dumps(data), mimetype='application/json')
-		return response
-	else:
-		data = {'message':'no shortcode provided'}
-		response = app.response_class(response=json.dumps(data), status=400, mimetype='application/json')
-		return response
+@app.route("/p/<shortcode>", methods=['GET'])
+def api_post(shortcode):
+	shortcode.strip("/")
+	likes_counter = str(likes_count(shortcode))
+	views_counter = str(views_count(shortcode))
+	data = {'shortcode':shortcode, 'likes_count':likes_counter, 'views_count':views_counter}
+	response = app.response_class(response=json.dumps(data), mimetype='application/json')
+	return response
 
-@app.route("/likes", methods=['GET'])
-def api_likes():
-	if 'shortcode' in request.args:
-		shortcode = str(request.args['shortcode'].strip("/"))
-		likes_counter = str(likes_count(shortcode))
-		data = {'shortcode':shortcode, 'likes_count':str(likes_counter)}
-		response = app.response_class(response=json.dumps(data), mimetype='application/json')
-		return response
-	else:
-		data = {'message':'no shortcode provided'}
-		response = app.response_class(response=json.dumps(data), status=400, mimetype='application/json')
-		return response
-
-@app.route("/followers", methods=['GET'])
-def api_followers():
-	if 'username' in request.args:
-		username = str(request.args['username'].strip("/"))
-		followers_counter = str(followers_count(username))
-		data = {'username':username, 'followers_count':str(followers_counter)}
-		response = app.response_class(response=json.dumps(data), mimetype='application/json')
-		return response
-	else:
-		data = {'message':'no username provided'}
-		response = app.response_class(response=json.dumps(data), status=400, mimetype='application/json')
-		return response
+@app.route("/<username>", methods=['GET'])
+def api_user(username):
+	username.strip("/")
+	followers_counter = str(followers_count(username))
+	data = {'username':username, 'followers_count':str(followers_counter)}
+	response = app.response_class(response=json.dumps(data), mimetype='application/json')
+	return response
 
 @app.errorhandler(404)
 def page_not_found(error):
