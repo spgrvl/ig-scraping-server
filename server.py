@@ -48,6 +48,8 @@ def get_user_data(username):
 	url = "https://www.instagram.com/" + username + "?__a=1"
 	driver.get(url)
 	page_source = driver.page_source
+	if len(page_source) == 106:
+		return -2
 	try:
 		followers_count = re.findall('(?<="edge_followed_by":{"count":)[0-9]*(?=})', page_source)[0]
 		return followers_count
