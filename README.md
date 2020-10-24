@@ -61,3 +61,7 @@ Instagram Scraping Server is a simple API that serves information about Instagra
 - `> 0` = Actual count
 - `-1` = No counter
 - `-2` = Page Not Found
+
+## Demo
+
+You can test the current version of this API [here](http://ig-demo.gourvelos.gr:18450/spgrvl/).
