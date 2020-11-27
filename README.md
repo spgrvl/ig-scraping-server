@@ -21,7 +21,9 @@ Instagram Scraping Server is a simple API that serves information about Instagra
 ```json
 {
 	"username": "<ig_username>",
-	"followers_count": "<followers_count>"
+	"followers_count": "<followers_count>",
+	"following_count": "<following_count>",
+	"posts_count": "<posts_count>"
 }
 ```
 

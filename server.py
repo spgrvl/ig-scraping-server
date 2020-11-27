@@ -49,12 +49,14 @@ def get_user_data(username):
 	driver.get(url)
 	page_source = driver.page_source
 	if len(page_source) == 106:
-		return -2
+		return -2, -2, -2
 	try:
 		followers_count = re.findall('(?<="edge_followed_by":{"count":)[0-9]*(?=})', page_source)[0]
-		return followers_count
+		following_count = re.findall('(?<="edge_follow":{"count":)[0-9]*(?=})', page_source)[0]
+		posts_count = re.findall('(?<="edge_owner_to_timeline_media":{"count":)[0-9]*(?=,)', page_source)[0]
+		return followers_count, following_count, posts_count
 	except:
-		return -1
+		return -1, -1, -1
 
 @app.route('/favicon.ico')
 def favicon():
@@ -74,8 +76,11 @@ def api_post(shortcode):
 
 @app.route("/<username>/", methods=['GET'])
 def api_user(username):
-	followers_counter = get_user_data(username)
-	data = {'username':username, 'followers_count':str(followers_counter)}
+	user_data = get_user_data(username)
+	followers_counter = user_data[0]
+	following_counter = user_data[1]
+	posts_counter = user_data[2]
+	data = {'username':username, 'followers_count':str(followers_counter), 'following_count':str(following_counter), 'posts_count':str(posts_counter)}
 	response = app.response_class(response=json.dumps(data), mimetype='application/json')
 	return response
 
