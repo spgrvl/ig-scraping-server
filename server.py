@@ -47,13 +47,14 @@ def get_post_data(shortcode):
 def get_user_data(username):
 	url = "https://www.instagram.com/" + username + "?__a=1"
 	driver.get(url)
-	page_source = driver.page_source
-	if len(page_source) == 106:
+	pre = driver.find_element_by_tag_name("pre").text
+	json_data = json.loads(pre)
+	if json_data == {}:
 		return -2, -2, -2
 	try:
-		followers_count = re.findall('(?<="edge_followed_by":{"count":)[0-9]*(?=})', page_source)[0]
-		following_count = re.findall('(?<="edge_follow":{"count":)[0-9]*(?=})', page_source)[0]
-		posts_count = re.findall('(?<="edge_owner_to_timeline_media":{"count":)[0-9]*(?=,)', page_source)[0]
+		followers_count = json_data['graphql']['user']['edge_followed_by']['count']
+		following_count = json_data['graphql']['user']['edge_follow']['count']
+		posts_count = json_data['graphql']['user']['edge_owner_to_timeline_media']['count']
 		return followers_count, following_count, posts_count
 	except:
 		return -1, -1, -1
