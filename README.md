@@ -2,6 +2,8 @@
 
 Instagram Scraping Server is a simple API that serves information about Instagram profiles or posts such as Likes, Views or Followers counts, built with Python and Flask.
 
+:warning: **Instagram no longer allows visiting profiles without being logged in! Soon login system will be incorporated to overcome this issue!**
+
 ## Requirements
 
 * Chrome Webdriver instance
