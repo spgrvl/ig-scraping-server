@@ -47,10 +47,12 @@ def get_post_data(shortcode):
 def get_user_data(username):
     url = "https://www.instagram.com/" + username + "?__a=1"
     driver.get(url)
+    if driver.title == "Page Not Found • Instagram":
+        return -2
     pre = driver.find_element_by_tag_name("pre").text
     json_data = json.loads(pre)
     if json_data == {}:
-        return -2, -2, -2, -2
+        return -2
     try:
         followers_count = json_data['graphql']['user']['edge_followed_by']['count']
         following_count = json_data['graphql']['user']['edge_follow']['count']
@@ -58,7 +60,7 @@ def get_user_data(username):
         is_private = json_data['graphql']['user']['is_private']
         return followers_count, following_count, posts_count, is_private
     except:
-        return -1, -1, -1, -1
+        return -1
 
 @app.route('/favicon.ico')
 def favicon():
@@ -79,10 +81,13 @@ def api_post(shortcode):
 @app.route("/<username>/", methods=['GET'])
 def api_user(username):
     user_data = get_user_data(username)
-    followers_counter = user_data[0]
-    following_counter = user_data[1]
-    posts_counter = user_data[2]
-    is_private = user_data[3]
+    if type(user_data) == int:
+        followers_counter = following_counter = posts_counter = is_private = user_data
+    else:
+        followers_counter = user_data[0]
+        following_counter = user_data[1]
+        posts_counter = user_data[2]
+        is_private = user_data[3]
     data = {'username':username, 'followers_count':str(followers_counter), 'following_count':str(following_counter), 'posts_count':str(posts_counter), 'is_private':str(is_private)}
     response = app.response_class(response=json.dumps(data), mimetype='application/json')
     return response
