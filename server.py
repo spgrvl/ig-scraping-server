@@ -6,6 +6,7 @@ from flask import send_file
 import json
 import re
 import os
+from sys import argv
 
 # Create an instance of Flask
 app = Flask(__name__)
@@ -28,6 +29,11 @@ chrome_options = Options()
 chrome_options.add_argument("--headless")
 chrome_options.add_argument("--user-agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36")
 driver = webdriver.Chrome(chrome_path, options=chrome_options)
+
+# Instagram Login (optional)
+if "--login" in argv:
+    import ig_login
+    ig_login.login(driver)
 
 def get_post_data(shortcode):
     url = "https://www.instagram.com/p/" + shortcode
