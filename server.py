@@ -23,10 +23,11 @@ elif os.name == "posix":
 else:
     print("Error: Chrome path is not set for this os: " + os.name)
 
-# Open headless chromedriver
+# Open headless chromedriver and change user-agent
 chrome_options = Options()
 chrome_options.add_argument("--headless")
-driver = webdriver.Chrome(chrome_path,chrome_options=chrome_options)
+chrome_options.add_argument("--user-agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36")
+driver = webdriver.Chrome(chrome_path, options=chrome_options)
 
 def get_post_data(shortcode):
     url = "https://www.instagram.com/p/" + shortcode
