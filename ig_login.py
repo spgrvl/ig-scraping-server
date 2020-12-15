@@ -21,4 +21,32 @@ def login(driver):
     
     login_button = driver.find_element_by_css_selector("[type^=submit]")
     login_button.click()
-    print("Instagram login done!")
+    time.sleep(5)
+
+    try:
+        unusual_login = driver.find_element_by_tag_name('h2').text
+        if unusual_login == "We Detected An Unusual Login Attempt":
+            code_login(driver)
+    except:
+        pass
+    finally:
+        time.sleep(5)
+        print("Instagram login done!")
+
+def code_login(driver):
+    print("Instagram: Unusual Login Attempt Detected!")
+    code_buttons = driver.find_elements_by_tag_name('button')
+    for button in code_buttons:
+        if button.text == "Send Security Code":
+            button.click()
+            break
+    time.sleep(3)
+
+    code_field = driver.find_element_by_tag_name('input')
+    code_field.send_keys(input("Enter the 6 digit code Instagram emailed you: "))
+
+    submit_buttons = driver.find_elements_by_tag_name('button')
+    for button in submit_buttons:
+        if button.text == "Submit":
+            button.click()
+            break
