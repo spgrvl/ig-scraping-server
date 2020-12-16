@@ -61,11 +61,13 @@ def get_user_data(username):
     if json_data == {}:
         return -2
     try:
+        full_name = json_data['graphql']['user']['full_name']
+        biography = json_data['graphql']['user']['biography']
         followers_count = json_data['graphql']['user']['edge_followed_by']['count']
         following_count = json_data['graphql']['user']['edge_follow']['count']
         posts_count = json_data['graphql']['user']['edge_owner_to_timeline_media']['count']
         is_private = json_data['graphql']['user']['is_private']
-        return followers_count, following_count, posts_count, is_private
+        return full_name, biography, followers_count, following_count, posts_count, is_private
     except:
         return -1
 
@@ -82,21 +84,23 @@ def api_post(shortcode):
         likes_counter = post_data[0]
         views_counter = post_data[1]
     data = {'shortcode':str(shortcode), 'likes_count':str(likes_counter), 'views_count':str(views_counter)}
-    response = app.response_class(response=json.dumps(data), mimetype='application/json')
+    response = app.response_class(response=json.dumps(data, ensure_ascii=False), mimetype='application/json')
     return response
 
 @app.route("/<username>/", methods=['GET'])
 def api_user(username):
     user_data = get_user_data(username)
     if type(user_data) == int:
-        followers_counter = following_counter = posts_counter = is_private = user_data
+        name = followers_counter = following_counter = posts_counter = is_private = bio = user_data
     else:
-        followers_counter = user_data[0]
-        following_counter = user_data[1]
-        posts_counter = user_data[2]
-        is_private = user_data[3]
-    data = {'username':username, 'followers_count':str(followers_counter), 'following_count':str(following_counter), 'posts_count':str(posts_counter), 'is_private':str(is_private)}
-    response = app.response_class(response=json.dumps(data), mimetype='application/json')
+        name = user_data[0]
+        bio = user_data[1]
+        followers_counter = user_data[2]
+        following_counter = user_data[3]
+        posts_counter = user_data[4]
+        is_private = user_data[5]
+    data = {'username':username, 'name':str(name), 'bio':str(bio), 'followers_count':str(followers_counter), 'following_count':str(following_counter), 'posts_count':str(posts_counter), 'is_private':str(is_private)}
+    response = app.response_class(response=json.dumps(data, ensure_ascii=False), mimetype='application/json')
     return response
 
 @app.errorhandler(404)

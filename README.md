@@ -26,6 +26,8 @@ If you want to login to Instagram in order to avoid Instagram's rate limits for 
 ```json
 {
 	"username": "<ig_username>",
+	"name": "<full_name>",
+	"bio": "<biograph>",
 	"followers_count": "<followers_count>",
 	"following_count": "<following_count>",
 	"posts_count": "<posts_count>",
