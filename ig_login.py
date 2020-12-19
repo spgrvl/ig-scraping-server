@@ -1,4 +1,5 @@
 import time
+import sys
 
 def login(driver):
     login_url = "https://www.instagram.com/accounts/login/"
@@ -31,7 +32,15 @@ def login(driver):
         pass
     finally:
         time.sleep(5)
-        print("Instagram login done!")
+        login_status(driver)
+
+def login_status(driver):
+    try:
+        driver.find_element_by_css_selector("[data-testid^=user-avatar]")
+        print("Instagram login done!\n")
+    except:
+        driver.quit()
+        sys.exit("Failed to login, exiting!")
 
 def code_login(driver):
     print("Instagram: Unusual Login Attempt Detected!")
