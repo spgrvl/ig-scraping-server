@@ -54,7 +54,9 @@ def get_post_data(shortcode):
 def get_user_data(username):
     url = "https://www.instagram.com/" + username + "?__a=1"
     driver.get(url)
-    if driver.title == "Page Not Found • Instagram":
+    if driver.current_url == "https://www.instagram.com/accounts/login/":
+        return "login"
+    elif driver.title == "Page Not Found • Instagram":
         return -2
     pre = driver.find_element_by_tag_name("pre").text
     json_data = json.loads(pre)
@@ -78,29 +80,37 @@ def favicon():
 @app.route("/p/<shortcode>/", methods=['GET'])
 def api_post(shortcode):
     post_data = get_post_data(shortcode)
-    if type(post_data) == int:
-        likes_counter = views_counter = post_data
+    if post_data == "login":
+        data = {'message':'instagram rate limit reached'}
+        response = app.response_class(response=json.dumps(data), status=500, mimetype='application/json')
     else:
-        likes_counter = post_data[0]
-        views_counter = post_data[1]
-    data = {'shortcode':str(shortcode), 'likes_count':str(likes_counter), 'views_count':str(views_counter)}
-    response = app.response_class(response=json.dumps(data, ensure_ascii=False), mimetype='application/json')
+        if type(post_data) == int:
+            likes_counter = views_counter = post_data
+        else:
+            likes_counter = post_data[0]
+            views_counter = post_data[1]
+        data = {'shortcode':str(shortcode), 'likes_count':str(likes_counter), 'views_count':str(views_counter)}
+        response = app.response_class(response=json.dumps(data, ensure_ascii=False), mimetype='application/json')
     return response
 
 @app.route("/<username>/", methods=['GET'])
 def api_user(username):
     user_data = get_user_data(username)
-    if type(user_data) == int:
-        name = followers_counter = following_counter = posts_counter = is_private = bio = user_data
+    if user_data == "login":
+        data = {'message':'instagram rate limit reached'}
+        response = app.response_class(response=json.dumps(data), status=500, mimetype='application/json')
     else:
-        name = user_data[0]
-        bio = user_data[1]
-        followers_counter = user_data[2]
-        following_counter = user_data[3]
-        posts_counter = user_data[4]
-        is_private = user_data[5]
-    data = {'username':username, 'name':str(name), 'bio':str(bio), 'followers_count':str(followers_counter), 'following_count':str(following_counter), 'posts_count':str(posts_counter), 'is_private':str(is_private)}
-    response = app.response_class(response=json.dumps(data, ensure_ascii=False), mimetype='application/json')
+        if type(user_data) == int:
+            name = followers_counter = following_counter = posts_counter = is_private = bio = user_data
+        else:
+            name = user_data[0]
+            bio = user_data[1]
+            followers_counter = user_data[2]
+            following_counter = user_data[3]
+            posts_counter = user_data[4]
+            is_private = user_data[5]
+        data = {'username':username, 'name':str(name), 'bio':str(bio), 'followers_count':str(followers_counter), 'following_count':str(following_counter), 'posts_count':str(posts_counter), 'is_private':str(is_private)}
+        response = app.response_class(response=json.dumps(data, ensure_ascii=False), mimetype='application/json')
     return response
 
 @app.errorhandler(404)
