@@ -1,5 +1,6 @@
 import time
 import sys
+import getpass
 
 def login(driver):
     login_url = "https://www.instagram.com/accounts/login/"
@@ -17,7 +18,7 @@ def login(driver):
     time.sleep(0.5)
     
     password_field = driver.find_element_by_name("password")
-    password_field.send_keys(input("Enter Instagram Password: "))
+    password_field.send_keys(getpass.getpass("Enter Instagram Password: "))
     time.sleep(0.5)
     
     login_button = driver.find_element_by_css_selector("[type^=submit]")
