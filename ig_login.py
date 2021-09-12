@@ -7,9 +7,10 @@ def login(driver):
     driver.get(login_url)    
     time.sleep(3)
 
+    # Click Accept in cookies banner
     buttons = driver.find_elements_by_tag_name('button')
     for button in buttons:
-        if button.text == "Accept":
+        if button.text == "Accept All":
             button.click()
             break
 
