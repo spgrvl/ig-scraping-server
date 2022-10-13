@@ -71,7 +71,3 @@ If you want to login to Instagram in order to avoid Instagram's rate limits for 
 - `> 0` = Actual count
 - `-1` = No counter
 - `-2` = Page Not Found
-
-## Demo
-
-You can test the current version of this API [here](http://ig-demo.gourvelos.gr:18450/spgrvl/).
